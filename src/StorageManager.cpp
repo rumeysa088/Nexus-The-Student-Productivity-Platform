@@ -7,7 +7,7 @@ using namespace std;
 
 bool StorageManager::usernameExists(string username)
 {
-    ifstream file("../data/users.txt");
+    ifstream file("data/users.txt");
 
     if (!file)
         return false;
@@ -39,7 +39,7 @@ bool StorageManager::saveStudent(const Student& student)
         return false;
     }
 
-    ofstream file("../data/users.txt", ios::app);
+    ofstream file("data/users.txt", ios::app);
 
     if (!file)
         return false;
@@ -57,9 +57,9 @@ bool StorageManager::saveStudent(const Student& student)
     return true;
 }
 
-bool StorageManager::login(string username, string password)
+bool StorageManager::login(string username, string password, Student &student)
 {
-    ifstream file("../data/users.txt");
+    ifstream file("data/users.txt");
 
     if (!file)
         return false;
@@ -70,13 +70,34 @@ bool StorageManager::login(string username, string password)
     {
         stringstream ss(line);
 
-        string u, p;
+        string u;
+        string p;
+        string name;
+        string email;
+        string id;
+        string semesterStr;
+        string department;
 
         getline(ss, u, '|');
         getline(ss, p, '|');
+        getline(ss, name, '|');
+        getline(ss, email, '|');
+        getline(ss, id, '|');
+        getline(ss, semesterStr, '|');
+        getline(ss, department);
 
         if (u == username && p == password)
         {
+            student = Student(
+                u,
+                p,
+                name,
+                email,
+                id,
+                stoi(semesterStr),
+                department
+            );
+
             file.close();
             return true;
         }
